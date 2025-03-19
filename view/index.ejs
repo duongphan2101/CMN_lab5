@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sach Mon Hoc</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <table class="table table-bordered">
+            <h1 class="text-center p-2">Danh Sach Mon Hoc</h1>
+            <thead class="table-dark">
+                <tr>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Ten Mon Hoc</th>
+                    <th>Loai Mon Hoc</th>
+                    <th>Hoc Ky</th>
+                    <th>Khoa</th> 
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i = 0; i < subjects.length; i++) { %>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="check" value="<%= subjects[i].id %>"  id="select-all">
+                        </td>
+                        <td>
+                            <%= subjects[i].id %>
+                        </td>
+                        <td>
+                            <%= subjects[i].tenMon %>
+                        </td>
+                        <td>
+                            <%= subjects[i].loaiMon%> 
+                        </td>
+                        <td>
+                            <%= subjects[i].hocKy %> 
+                        </td>
+                        <td>
+                            <%= subjects[i].khoa%> 
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+
+        <form action="/delete" method="post" id="delete-form">
+            <button type="submit" class="btn btn-danger my-3">Delete Selected</button>
+        </form>
+
+        <form class="mt-4" action="/save" method="post">
+            <h3 class="text-center">Form Thông Tin</h3>
+            <input class="form-control" type="text" name="id" placeholder="Nhập Id ... " required>
+            <br>
+            <input class="form-control" type="text" name="tenMon" placeholder="Nhập Name ... " required>
+            <br>
+            <input class="form-control" type="text" name="loaiMon" placeholder="Nhập course_type ... " required>
+            <br>
+            <input class="form-control" type="text" name="hocKy" placeholder="Nhập Semester ... " required>
+            <br>
+            <input class="form-control" type="text" name="khoa" placeholder="Nhập Department... " required>
+            <br>
+            <button class="btn btn-success form-control">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Select/Deselect all checkboxes
+        document.getElementById("select-all").addEventListener("change", function() {
+            const checkboxes = document.querySelectorAll('input[name="check"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        // Handle delete form submission with selected checkboxes
+        document.getElementById("delete-form").addEventListener("submit", function(event) {
+            const selectedIds = [];
+            document.querySelectorAll('input[name="check"]:checked').forEach(checkbox => {
+                selectedIds.push(checkbox.value);
+            });
+
+            if (selectedIds.length === 0) {
+                event.preventDefault();
+                alert("Please select at least one subject to delete.");
+            } else {
+                // Append selected IDs to the form data
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "ids"; // Adjust according to your server-side processing
+                input.value = JSON.stringify(selectedIds);
+                this.appendChild(input);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
