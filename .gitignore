@@ -1,0 +1,11 @@
+# Ignore environment files
+.env
+*.key
+*.pem
+
+# Ignore dependencies
+node_modules/
+
+# Ignore logs
+*.log
+logs/
