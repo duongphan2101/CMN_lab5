@@ -20,14 +20,15 @@
                     <th>Ten Mon Hoc</th>
                     <th>Loai Mon Hoc</th>
                     <th>Hoc Ky</th>
-                    <th>Khoa</th> 
+                    <th>Hinh Anh</th>
+                    <th>Khoa</th>
                 </tr>
             </thead>
             <tbody>
                 <% for (let i = 0; i < subjects.length; i++) { %>
                     <tr>
                         <td>
-                            <input type="checkbox" name="check" value="<%= subjects[i].id %>"  id="select-all">
+                            <input type="checkbox" name="check" value="<%= subjects[i].id %>" id="select-all">
                         </td>
                         <td>
                             <%= subjects[i].id %>
@@ -36,13 +37,16 @@
                             <%= subjects[i].tenMon %>
                         </td>
                         <td>
-                            <%= subjects[i].loaiMon%> 
+                            <%= subjects[i].loaiMon%>
                         </td>
                         <td>
-                            <%= subjects[i].hocKy %> 
+                            <%= subjects[i].hocKy %>
                         </td>
                         <td>
-                            <%= subjects[i].khoa%> 
+                            <img src="<%= subjects[i].hinhAnh %>" alt="" srcset="" width="100px">
+                        </td>
+                        <td>
+                            <%= subjects[i].khoa%>
                         </td>
                     </tr>
                     <% } %>
@@ -53,7 +57,7 @@
             <button type="submit" class="btn btn-danger my-3">Delete Selected</button>
         </form>
 
-        <form class="mt-4" action="/save" method="post">
+        <form class="mt-4" action="/save" method="post" enctype="multipart/form-data">
             <h3 class="text-center">Form Thông Tin</h3>
             <input class="form-control" type="text" name="id" placeholder="Nhập Id ... " required>
             <br>
@@ -62,6 +66,8 @@
             <input class="form-control" type="text" name="loaiMon" placeholder="Nhập course_type ... " required>
             <br>
             <input class="form-control" type="text" name="hocKy" placeholder="Nhập Semester ... " required>
+            <br>
+            <input class="form-control" type="file" name="hinhAnh" placeholder="Nhập Image ... " required>
             <br>
             <input class="form-control" type="text" name="khoa" placeholder="Nhập Department... " required>
             <br>
