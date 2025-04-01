@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <form class="mt-4" action="/update" method="post" enctype="multipart/form-data">
+            <h3 class="text-center">Form Thông Tin</h3>
+            <input class="form-control" type="text" name="id" placeholder="Nhập Id ... " value="<%= subject.id%>" required>
+            <br>
+            <input class="form-control" type="text" name="tenMon" placeholder="Nhập Name ... " value="<%= subject.tenMon %>" required>
+            <br>
+            <input class="form-control" type="text" name="loaiMon" placeholder="Nhập course_type ... " value="<%= subject.loaiMon %>" required>
+            <br>
+            <input class="form-control" type="text" name="hocKy" placeholder="Nhập Semester ... " value="<%= subject.hocKy %>" required>
+            <br>
+            <input class="form-control" type="file" name="hinhAnh" placeholder="Nhập Image ... " value="<%= subject.hinhAnh %>" required>
+            <br>
+            <input class="form-control" type="text" name="khoa" placeholder="Nhập Department... " value="<%= subject.khoa %>" required>
+            <br>
+            <button class="btn btn-warning form-control">Submit</button>
+        </form>
+    </div>
+
+    <!-- <script>
+        // Select/Deselect all checkboxes
+        document.getElementById("select-all").addEventListener("change", function() {
+            const checkboxes = document.querySelectorAll('input[name="check"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        // Handle delete form submission with selected checkboxes
+        document.getElementById("delete-form").addEventListener("submit", function(event) {
+            const selectedIds = [];
+            document.querySelectorAll('input[name="check"]:checked').forEach(checkbox => {
+                selectedIds.push(checkbox.value);
+            });
+
+            if (selectedIds.length === 0) {
+                event.preventDefault();
+                alert("Please select at least one subject to delete.");
+            } else {
+                // Append selected IDs to the form data
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "ids"; // Adjust according to your server-side processing
+                input.value = JSON.stringify(selectedIds);
+                this.appendChild(input);
+            }
+        });
+    </script> -->
+
+</body>
+
+</html>

@@ -1,9 +1,9 @@
 const express = require('express');
 const AWS = require('aws-sdk');
 const multer = require('multer');
-const { v4: uuid } = require('uuid');
 require("dotenv").config();
-
+const { v4: uuidv4 } = require('uuid');
+const uuid = uuidv4;
 const app = express();
 const PORT = 5000;
 
@@ -114,7 +114,6 @@ app.post('/delete', (req, res) => {
         return res.send("No valid subjects selected.");
     }
 
-    console.log("Deleting subjects with IDs:", selectedIds);
 
     const deletePromises = selectedIds.map(id => {
         const params = {
@@ -134,6 +133,61 @@ app.post('/delete', (req, res) => {
             res.send("Error deleting subjects.");
         });
 });
+
+app.post('/update', upload.single('hinhAnh'), (req, res) => {
+    const { id, tenMon, loaiMon, hocKy, khoa } = req.body;
+    if (!id || !tenMon || !loaiMon || !hocKy || !khoa) return res.status(400).send("Missing required fields.");
+
+    const updateData = { ":tenMon": tenMon, ":loaiMon": loaiMon, ":hocKy": hocKy, ":khoa": khoa };
+
+    if (!req.file) {
+        return Db.update({
+            TableName: 'Subject',
+            Key: { id },
+            UpdateExpression: "set tenMon = :tenMon, loaiMon = :loaiMon, hocKy = :hocKy, khoa = :khoa",
+            ExpressionAttributeValues: updateData,
+            ReturnValues: "UPDATED_NEW"
+        }, (err) => err ? res.status(500).send("Error updating subject.") : res.redirect('/'));
+    }
+
+    const filePath = `${uuidv4()}_${Date.now()}.${req.file.originalname.split('.').pop()}`;
+    s3.upload({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: filePath,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype
+    }, (err, data) => {
+        if (err) return res.status(500).send("Error uploading file to S3.");
+        
+        updateData[":hinhAnh"] = data.Location;
+        Db.update({
+            TableName: 'Subject',
+            Key: { id },
+            UpdateExpression: "set tenMon = :tenMon, loaiMon = :loaiMon, hocKy = :hocKy, khoa = :khoa, hinhAnh = :hinhAnh",
+            ExpressionAttributeValues: updateData,
+            ReturnValues: "UPDATED_NEW"
+        }, (err) => err ? res.status(500).send("Error updating subject.") : res.redirect('/'));
+    });
+});
+
+
+
+app.post('/edit', (req, res) =>{
+    const id = req.body.id;
+    const params = {
+        TableName: table_name,
+        Key: { id }
+    };
+
+    Db.get(params, (err, data) => {
+        if (err) {
+            console.error("Error fetching subject:", err);
+            return res.send("Error fetching subject.");
+        }
+        res.render('edit', { subject: data.Item });
+    });
+})
+
 
 // Khởi chạy server
 app.listen(PORT, () => {

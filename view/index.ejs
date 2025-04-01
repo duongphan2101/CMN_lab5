@@ -11,7 +11,7 @@
 
 <body>
     <div class="container">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center table-striped table-hover">
             <h1 class="text-center p-2">Danh Sach Mon Hoc</h1>
             <thead class="table-dark">
                 <tr>
@@ -22,6 +22,7 @@
                     <th>Hoc Ky</th>
                     <th>Hinh Anh</th>
                     <th>Khoa</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +48,12 @@
                         </td>
                         <td>
                             <%= subjects[i].khoa%>
+                        </td>
+                        <td>
+                            <form action="/edit" method="post">
+                                <input type="hidden" name="id" value="<%= subjects[i].id %>">
+                                <button class="btn btn-warning">Edit</button>
+                            </form>
                         </td>
                     </tr>
                     <% } %>
